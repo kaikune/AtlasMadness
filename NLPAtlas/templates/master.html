@@ -80,7 +80,7 @@
                 <button type="submit" class="btn btn-primary">Submit</button>
               </div>
             </form>
-            {% if result %}
+            {% if result %} <!--Generated Query-->
               <div class="mt-3">
                 <h5 class="card-title">Result:</h5>
                 <pre>{{ result }}</pre>
@@ -88,6 +88,11 @@
             {% endif %}
           </div>
         </div>
+        {% if dataframe %} <!--Database data-->
+          <div class="mt-3">
+            <pre>{{ dataframe }}</pre>
+          </div>
+        {% endif %}
       </div>
     </div>
   </div>

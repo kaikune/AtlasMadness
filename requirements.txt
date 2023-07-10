@@ -22,13 +22,16 @@ grpc-google-iam-v1==0.12.6
 grpcio==1.56.0
 grpcio-status==1.56.0
 idna==3.4
+numpy==1.25.1
 packaging==23.1
+pandas==2.0.3
 proto-plus==1.22.3
 protobuf==4.23.4
 pyasn1==0.5.0
 pyasn1-modules==0.3.0
 pymongo==4.4.0
 python-dateutil==2.8.2
+pytz==2023.3
 requests==2.31.0
 rsa==4.9
 Shapely==1.8.5.post1
@@ -36,4 +39,5 @@ six==1.16.0
 soupsieve==2.4.1
 sqlparse==0.4.4
 typing_extensions==4.7.1
+tzdata==2023.3
 urllib3==1.26.16

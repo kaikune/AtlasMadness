@@ -7,7 +7,7 @@ import vertexai
 from vertexai.preview.language_models import CodeGenerationModel
 from django.views.decorators.csrf import csrf_exempt
 import ast
-import re
+import pandas as pd
 
 uri = 'mongodb+srv://alexkai03:fDiGRgzlwU0MFS0V@cluster0.bdepqww.mongodb.net/?retryWrites=true&w=majority'
 
@@ -46,6 +46,7 @@ def isValidPython(code):
        ast.parse(code)
    except SyntaxError:
        return False
+   print('Validated!')
    return True
 
 # Generate query from user input
@@ -63,9 +64,6 @@ def generateQuery(str):
     )
     response = response.text[9:-3]
     print(f'Response from Model:\n{response}')
-
-    if not isValidPython(response):
-        raise Exception('Invalid code generated')
     return response
 
 cursor = 'Cursor Empty'
@@ -80,15 +78,11 @@ def runQuery(query):
         print(f'Invalid query: {e}')
         return 'Bad query'
 
-# def index(request):
-#     return HttpResponse(runQuery(generateQuery(prompt)))
-#     # documents = collection.find({}, {'_id': 0, 'name': 1}).limit(5)
-#     # names = [document['name'] for document in documents]
-#     # return HttpResponse('<br>'.join(names))
-
 @csrf_exempt
 def main(request):
     userQuery = ''
+    data = ''
+    df = None
     if request.method == 'POST':
         # Retrieve the userQuery value from the form data
         userQuery = request.POST.get('userQuery', '') 
@@ -96,11 +90,16 @@ def main(request):
         print('User Query:', userQuery)
         userQuery = prompt.format(userQuery)
         result = generateQuery(userQuery)
-        # You can perform further processing with the userQuery value here
+
+        if isValidPython(result):
+            data = runQuery(result)
+            df = pd.DataFrame(data)
+            print(df)
+            df = df.to_html()
     else:
         userQuery = ''  # Set the initial value of userQuery when the page is first loaded
         result = None
 
-    context = {'userQuery': userQuery, 'result': result}
+    context = {'userQuery': userQuery, 'result': result, 'dataframe': df}
     return render(request, 'master.html', context)
 
