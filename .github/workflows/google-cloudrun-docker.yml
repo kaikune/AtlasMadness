@@ -73,7 +73,7 @@ jobs:
         with:
           token_format: 'access_token'
           workload_identity_provider: 'projects/953795529535/locations/global/workloadIdentityPools/my-pool/providers/my-provider' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
-          service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
+          service_account: 'my-service-account@atlas-madness-392102.iam.gserviceaccount.com' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
 
       # NOTE: Alternative option - authentication via credentials json
       # - name: Google Auth
