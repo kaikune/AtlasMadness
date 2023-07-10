@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import vertexai
 from vertexai.preview.language_models import CodeGenerationModel
-from django.views.decorators.csrf import csrf_protect 
+from django.views.decorators.csrf import csrf_exempt
 import ast
 import re
 
@@ -86,7 +86,7 @@ def runQuery(query):
 #     # names = [document['name'] for document in documents]
 #     # return HttpResponse('<br>'.join(names))
 
-@csrf_protect
+@csrf_exempt
 def main(request):
     userQuery = ''
     if request.method == 'POST':
