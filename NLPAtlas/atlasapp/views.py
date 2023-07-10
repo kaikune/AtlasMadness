@@ -30,6 +30,7 @@ client = MongoClient(uri, server_api=ServerApi('1'))
 db = client['sample_airbnb']
 collection = db.listingsAndReviews
 
+
 # Send a ping to confirm a successful connection
 try:
     client.admin.command('ping')
