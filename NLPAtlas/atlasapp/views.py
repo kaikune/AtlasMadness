@@ -63,9 +63,6 @@ def generateQuery(str):
     )
     response = response.text[9:-3]
     print(f'Response from Model:\n{response}')
-
-    if not isValidPython(response):
-        raise Exception('Invalid code generated')
     return response
 
 cursor = 'Cursor Empty'
@@ -80,15 +77,10 @@ def runQuery(query):
         print(f'Invalid query: {e}')
         return 'Bad query'
 
-# def index(request):
-#     return HttpResponse(runQuery(generateQuery(prompt)))
-#     # documents = collection.find({}, {'_id': 0, 'name': 1}).limit(5)
-#     # names = [document['name'] for document in documents]
-#     # return HttpResponse('<br>'.join(names))
-
 @csrf_exempt
 def main(request):
     userQuery = ''
+    data = ''
     if request.method == 'POST':
         # Retrieve the userQuery value from the form data
         userQuery = request.POST.get('userQuery', '') 
@@ -96,11 +88,13 @@ def main(request):
         print('User Query:', userQuery)
         userQuery = prompt.format(userQuery)
         result = generateQuery(userQuery)
-        # You can perform further processing with the userQuery value here
+
+        if isValidPython(result):
+            data = runQuery(result)
     else:
         userQuery = ''  # Set the initial value of userQuery when the page is first loaded
         result = None
 
-    context = {'userQuery': userQuery, 'result': result}
+    context = {'userQuery': userQuery, 'result': result, 'data': data}
     return render(request, 'master.html', context)
 
