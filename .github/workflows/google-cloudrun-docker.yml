@@ -93,9 +93,6 @@ jobs:
           password: '${{ steps.auth.outputs.access_token }}'
           registry: 'gcr.io'
 
-      - name: Reauthenticate with gcloud
-        run: gcloud auth login
-        
       - name: Build and Push Container
         run: |-
           docker build -t "gcr.io/${{ env.PROJECT_ID }}/${{ env.REPO }}/${{ env.SERVICE }}:${{ github.sha }}" ./
