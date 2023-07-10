@@ -5,6 +5,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 import vertexai
 from vertexai.preview.language_models import CodeGenerationModel
+from django.views.decorators.csrf import csrf_protect 
 import ast
 import re
 
@@ -79,12 +80,13 @@ def runQuery(query):
         print(f'Invalid query: {e}')
         return 'Bad query'
 
-def index(request):
-    return HttpResponse(runQuery(generateQuery(prompt)))
-    # documents = collection.find({}, {'_id': 0, 'name': 1}).limit(5)
-    # names = [document['name'] for document in documents]
-    # return HttpResponse('<br>'.join(names))
+# def index(request):
+#     return HttpResponse(runQuery(generateQuery(prompt)))
+#     # documents = collection.find({}, {'_id': 0, 'name': 1}).limit(5)
+#     # names = [document['name'] for document in documents]
+#     # return HttpResponse('<br>'.join(names))
 
+@csrf_protect
 def main(request):
     userQuery = ''
     if request.method == 'POST':
