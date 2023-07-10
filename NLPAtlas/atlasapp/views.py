@@ -23,7 +23,7 @@ prompt = 'You are a natural language to MongoDB query generator that only output
     The collection is "listingsAndReviews". \
     There is a limit of 10 documents unless otherwise specified. \
     Instead of printing the result, store the result in cursor. \
-    Write the query: "find the lowest minimum_nights value in the data"'
+    Write the query: "{}"'
 
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
@@ -59,7 +59,7 @@ def generateQuery(str):
         prefix = str,
         **parameters
     )
-    response = response.text[10:-3]
+    response = response.text[9:-3]
     print(f'Response from Model:\n{response}')
 
     if not isValidPython(response):
@@ -85,4 +85,19 @@ def index(request):
     # return HttpResponse('<br>'.join(names))
 
 def main(request):
-    return render(request, 'master.html')
+    userQuery = ''
+    if request.method == 'POST':
+        # Retrieve the userQuery value from the form data
+        userQuery = request.POST.get('userQuery', '') 
+
+        print('User Query:', userQuery)
+        userQuery = prompt.format(userQuery)
+        result = generateQuery(userQuery)
+        # You can perform further processing with the userQuery value here
+    else:
+        userQuery = ''  # Set the initial value of userQuery when the page is first loaded
+        result = None
+
+    context = {'userQuery': userQuery, 'result': result}
+    return render(request, 'master.html', context)
+
