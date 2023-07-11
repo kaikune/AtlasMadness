@@ -21,16 +21,16 @@ prompt = 'You are a natural language to MongoDB query generator that only output
     #Do the mongoDB query here \
     cursor = #query result \
     The constraints are: \
-    The database name is "sample_airbnb". \
-    The collection is "listingsAndReviews". \
+    The database name is "sample_supplies". \
+    The collection is "sales". \
     There is a limit of 10 documents unless otherwise specified. \
     Instead of printing the result, store the result in cursor. \
     Write the query: "{}"'
 
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
-db = client['sample_airbnb']
-collection = db.listingsAndReviews
+db = client['sample_supplies']
+collection = db.sales
 
 
 # Send a ping to confirm a successful connection
@@ -105,6 +105,6 @@ def main(request):
         userQuery = ''  # Set the initial value of userQuery when the page is first loaded
         result = 'Error has occurred' 
 
-    context = {'userQuery': userQuery, 'result': result, 'dataframe': df}
+    context = {'userQuery': userQuery, 'result': result, 'dataframe': df, 'db': db, 'collection': collection}
     return render(request, 'master.html', context)
 
