@@ -96,21 +96,23 @@ def main(request):
         collection = request.POST.get('collection')
 
         collectionNames = []
+        result = ''
         if db:
             # Get the list of collections for the selected database
             collectionNames = client[db].list_collection_names()
 
-        userQuery = prompt.format(db, collection, userQuery)
-        print('User Query:', userQuery)
-        result = generateQuery(userQuery)
+        if collection:
+            userQuery = prompt.format(db, collection, userQuery)
+            print('User Query:', userQuery)
+            result = generateQuery(userQuery)
 
-        if isValidPython(result):
-            data = runQuery(result, db, collection)
-            df = pd.DataFrame(data)
-            print(df)
-            df = df.to_html(classes='table table-dark table-hover')
-        else:
-            print('Bad python generated')
+            if isValidPython(result):
+                data = runQuery(result, db, collection)
+                df = pd.DataFrame(data)
+                print(df)
+                df = df.to_html(classes='table table-dark table-hover')
+            else:
+                print('Bad python generated')
 
         context = {
             'userQuery': userQuery,
@@ -127,3 +129,9 @@ def main(request):
         context = {'databaseNames': databaseNames, 'userQuery': userQuery, 'result': result}
 
     return render(request, 'master.html', context)
+
+def update_collections(request):
+    database = request.GET.get('database')
+    # Get the list of collections for the selected database
+    collectionNames = client[database].list_collection_names()
+    return JsonResponse(list(collectionNames), safe=False)

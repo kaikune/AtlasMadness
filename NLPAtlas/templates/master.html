@@ -118,7 +118,22 @@
   <script>
     // Update collection options when the database selection changes
     document.getElementById('database').addEventListener('change', function() {
-      document.getElementById('dbForm').submit();
+      var database = this.value;
+      fetch('/update_collections?database=' + database)
+        .then(response => response.json())
+        .then(data => {
+          var collectionSelect = document.getElementById('collection');
+          collectionSelect.innerHTML = ''; // Clear existing options
+          data.forEach(collection => {
+            var option = document.createElement('option');
+            option.value = collection;
+            option.text = collection;
+            collectionSelect.appendChild(option);
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
     });
   </script>
 </body>
