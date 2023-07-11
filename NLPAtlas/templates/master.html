@@ -85,6 +85,11 @@
                 <h5 class="card-title">Result:</h5>
                 <pre>{{ result }}</pre>
               </div>
+              {% if data %} <!--Database data-->
+                <div class="mt-3">
+                  <pre>{{ data }}</pre>
+                </div>
+              {% endif %}
             {% endif %}
           </div>
         </div>
