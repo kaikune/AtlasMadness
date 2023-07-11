@@ -9,6 +9,7 @@ from django.views.decorators.csrf import csrf_exempt
 import ast
 import pandas as pd
 
+
 uri = 'mongodb+srv://alexkai03:fDiGRgzlwU0MFS0V@cluster0.bdepqww.mongodb.net/?retryWrites=true&w=majority'
 
 # TODO: Make updatable
