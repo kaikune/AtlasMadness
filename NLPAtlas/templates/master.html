@@ -74,22 +74,25 @@
             <!-- DB Picker -->
             <form id="dbForm" method="post" action="{% url 'main' %}">
               {% csrf_token %}
-              <div class="form-group">
-                <label for="database">Select Database:</label>
-                <select class="form-control" id="database" name="database">
-                  {% for database in databaseNames %}
-                    <option value="{{ database }}">{{ database }}</option>
-                  {% endfor %}
-                </select>
+              <div class="picker-container">
+                <div class="form-group">
+                  <label for="database">Select Database:</label>
+                  <select class="form-control" id="database" name="database">
+                    {% for database in databaseNames %}
+                      <option value="{{ database }}">{{ database }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="collection">Select Collection:</label>
+                  <select class="form-control" id="collection" name="collection">
+                    {% for collection in collectionNames %}
+                      <option value="{{ collection }}">{{ collection }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
               </div>
-              <div class="form-group">
-                <label for="collection">Select Collection:</label>
-                <select class="form-control" id="collection" name="collection">
-                  {% for collection in collectionNames %}
-                    <option value="{{ collection }}">{{ collection }}</option>
-                  {% endfor %}
-                </select>
-              </div>
+              
               <!-- User input query -->
               <div class="mb-3">
                 <input id="userQuery" name="userQuery" class="form-control" type="text" placeholder="E.g., find all documents with 'foo' field">
