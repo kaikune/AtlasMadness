@@ -15,6 +15,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the rest of the application code
 COPY /NLPAtlas .
 
+# Apply database migrations
+RUN python manage.py migrate
+
 # Expose the port that your Django app will run on
 EXPOSE 8080
 
