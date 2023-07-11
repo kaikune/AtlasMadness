@@ -16,13 +16,13 @@ uri = 'mongodb+srv://alexkai03:fDiGRgzlwU0MFS0V@cluster0.bdepqww.mongodb.net/?re
 prompt = 'You are a natural language to MongoDB query generator that only outputs code if 100percent certain of correctness.\
       Assume prerequisite code is supplied. All queries will be executed in python so it must follow python syntax. \
       In the format: \
-    db=client["{}"] \
-    collection = db.{} \
+    db=client["database_name"] \
+    collection = db.collection_name \
     #Do the mongoDB query here \
     cursor = #query result \
     The constraints are: \
-    The database name is "sample_supplies". \
-    The collection is "sales". \
+    The database name is "{}}". \
+    The collection is "{}". \
     There is a limit of 10 documents unless otherwise specified. \
     Instead of printing the result, store the result in cursor. \
     Write the query: "{}"'
@@ -82,7 +82,6 @@ def runQuery(query, db, collection):
             print(f'Invalid query: {e}')
             return 'Bad query'
     return runQueryHelper()
-
 
 @csrf_exempt
 def main(request):
