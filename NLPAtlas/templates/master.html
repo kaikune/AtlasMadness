@@ -16,6 +16,17 @@
    .container {
      margin-top: 100px;
    }
+    /* Set the title color to match the MongoDB logo */
+    .title-card {
+      background-color: #589636;
+      color: #ffffff;
+      padding: 20px;
+    }
+    
+    .title-card h1 {
+      margin: 0;
+    }
+
    .card {
      background-color: #282828;
      color: #f8f8f8;
@@ -67,12 +78,15 @@
   </style>
 </head>
 <body>
+  <div class="title-card">
+    <h1>LearnMongo</h1>
+  </div>
  <div class="container">
    <div class="row justify-content-center">
      <div class="col-md-6">
         <div class="card">
           <div class="card-body">
-            <h5 class="card-title">Enter your query</h5>
+            <h5 class="card-title">LearnMongo</h5>
             <!-- DB Picker -->
             <form id="dbForm" method="post" action="{% url 'main' %}">
               {% csrf_token %}
@@ -95,6 +109,7 @@
                 </div>
               </div>
               <!-- User input query -->
+              <label for="userQuery">Enter Query:</label>
               <div class="mb-3">
                 <input id="userQuery" name="userQuery" class="form-control" type="text" placeholder="E.g., find all documents with 'foo' field">
               </div>
