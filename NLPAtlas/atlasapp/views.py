@@ -29,9 +29,6 @@ prompt = 'You are a natural language to MongoDB query generator that only output
 
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
-# db = client['sample_supplies']
-# collection = db.sales
-
 
 # Send a ping to confirm a successful connection
 try:
@@ -72,14 +69,16 @@ cursor = 'Cursor Empty'
 # Attempt to run generated query
 def runQuery(query, db, collection):
     def runQueryHelper():
+        nonlocal db, collection
         print('Running query...')
         try:
             exec(query, globals())
+            print('Query executed!')
             return cursor
         except Exception as e:
             print(f'Invalid query: {e}')
             return 'Bad query'
-    runQueryHelper()
+    return runQueryHelper()
 
 
 @csrf_exempt
