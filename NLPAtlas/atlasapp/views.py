@@ -14,19 +14,20 @@ uri = 'mongodb+srv://alexkai03:fDiGRgzlwU0MFS0V@cluster0.bdepqww.mongodb.net/?re
 prompt = 'You are a natural language to MongoDB query generator that only outputs code if 100percent certain of correctness.\
        Assume prerequisite code is supplied. All queries will be executed in python so it must follow python syntax. \
        In the format: \
-     db=client["{}"] \
-     collection = db.{} \
+     db=client["database_name"] \
+     collection = db.collection_name \
      #Do the mongoDB query here \
      cursor = #query result \
      The constraints are: \
-     The database name is "sample_supplies". \
-     The collection is "sales". \
+     The database name is "{}". \
+     The collection is "{}". \
      There is a limit of 10 documents unless otherwise specified. \
      Instead of printing the result, store the result in cursor. \
      Write the query: "{}"'
   
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
+
 # Send a ping to confirm a successful connection
 try:
     client.admin.command('ping')
@@ -42,6 +43,7 @@ def isValidPython(code):
        return False
    print('Validated!')
    return True
+
 # Generate query from user input
 def generateQuery(str):
     print('Generating query...')
@@ -74,13 +76,12 @@ def runQuery(query, db, collection):
             return 'Bad query'
     return runQueryHelper()
 
-
 @csrf_exempt
 def main(request):
     userQuery = ''
     data = ''
     df = None
-    db = None
+    db = 'sample_airbnb'
     databaseNames = client.list_database_names()
     if request.method == 'POST':
         # Retrieve the userQuery value from the form data

@@ -52,7 +52,18 @@
    }
     ::-webkit-scrollbar-thumb:hover {
       background-color: #a0a0a0;
+   }
+
+   .picker-container {
+      display: flex;
+      margin-bottom: 20px; /* Add margin bottom to create space */
     }
+    
+    .picker-container .form-group {
+      flex: 1;
+      margin-right: 10px;
+    }
+ 
   </style>
 </head>
 <body>
@@ -65,21 +76,23 @@
             <!-- DB Picker -->
             <form id="dbForm" method="post" action="{% url 'main' %}">
               {% csrf_token %}
-              <div class="form-group">
-                <label for="database">Select Database:</label>
-                <select class="form-control" id="database" name="database">
-                  {% for database in databaseNames %}
-                    <option value="{{ database }}">{{ database }}</option>
-                  {% endfor %}
-               </select>
-             </div>
-             <div class="form-group">
-               <label for="collection">Select Collection:</label>
-               <select class="form-control" id="collection" name="collection">
-                 {% for collection in collectionNames %}
-                   <option value="{{ collection }}">{{ collection }}</option>
-                  {% endfor %}
-                </select>
+              <div class="picker-container">
+                <div class="form-group">
+                  <label for="database">Select Database:</label>
+                  <select class="form-control" id="database" name="database">
+                    {% for database in databaseNames %}
+                      <option value="{{ database }}">{{ database }}</option>
+                    {% endfor %}
+                 </select>
+               </div>
+               <div class="form-group">
+                 <label for="collection">Select Collection:</label>
+                 <select class="form-control" id="collection" name="collection">
+                   {% for collection in collectionNames %}
+                     <option value="{{ collection }}">{{ collection }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
               </div>
               <!-- User input query -->
               <div class="mb-3">
