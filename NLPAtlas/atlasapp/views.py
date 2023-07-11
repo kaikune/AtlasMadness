@@ -72,15 +72,16 @@ cursor = 'Cursor Empty'
 # Attempt to run generated query
 def runQuery(query, db, collection):
     def runQueryHelper():
+        nonlocal db, collection
         print('Running query...')
         try:
             exec(query, globals())
+            print('Query execute')
             return cursor
         except Exception as e:
             print(f'Invalid query: {e}')
             return 'Bad query'
-    runQueryHelper()
-
+    return runQueryHelper()
 
 @csrf_exempt
 def main(request):
@@ -96,23 +97,21 @@ def main(request):
         collection = request.POST.get('collection')
 
         collectionNames = []
-        result = ''
         if db:
             # Get the list of collections for the selected database
             collectionNames = client[db].list_collection_names()
 
-        if collection:
-            userQuery = prompt.format(db, collection, userQuery)
-            print('User Query:', userQuery)
-            result = generateQuery(userQuery)
+        userQuery = prompt.format(db, collection, userQuery)
+        print('User Query:', userQuery)
+        result = generateQuery(userQuery)
 
-            if isValidPython(result):
-                data = runQuery(result, db, collection)
-                df = pd.DataFrame(data)
-                print(df)
-                df = df.to_html(classes='table table-dark table-hover')
-            else:
-                print('Bad python generated')
+        if isValidPython(result):
+            data = runQuery(result, db, collection)
+            df = pd.DataFrame(data)
+            print(df)
+            df = df.to_html(classes='table table-dark table-hover')
+        else:
+            print('Bad python generated')
 
         context = {
             'userQuery': userQuery,
@@ -130,8 +129,12 @@ def main(request):
 
     return render(request, 'master.html', context)
 
+@csrf_exempt
 def update_collections(request):
-    database = request.GET.get('database')
-    # Get the list of collections for the selected database
-    collectionNames = client[database].list_collection_names()
-    return JsonResponse(list(collectionNames), safe=False)
+    db = request.POST.get('database')
+    collectionNames = []
+    if db:
+        # Get the list of collections for the selected database
+        collectionNames = client[db].list_collection_names()
+
+    return JsonResponse({'collections': collectionNames})
