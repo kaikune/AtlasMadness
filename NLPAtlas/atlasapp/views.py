@@ -90,15 +90,19 @@ def main(request):
         print('User Query:', userQuery)
         userQuery = prompt.format(userQuery)
         result = generateQuery(userQuery)
-
+#         result = 'df = client["sample_airbnb"]\n\
+# collection = db.listingsAndReviews\n\
+# cursor = collection.find({}, {"name": 1, "_id": 0}).limit(5)'
         if isValidPython(result):
             data = runQuery(result)
             df = pd.DataFrame(data)
             print(df)
-            df = df.to_html()
+            df = df.to_html(classes='table table-dark table-hover')
+        else:
+            print('Bad python generated')
     else:
         userQuery = ''  # Set the initial value of userQuery when the page is first loaded
-        result = None
+        result = 'Error has occurred' 
 
     context = {'userQuery': userQuery, 'result': result, 'dataframe': df}
     return render(request, 'master.html', context)
