@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.shortcuts import render
 import vertexai
 from vertexai.preview.language_models import CodeGenerationModel
@@ -81,6 +81,7 @@ def runQuery(query, db, collection):
             return 'Bad query'
     runQueryHelper()
 
+
 @csrf_exempt
 def main(request):
     userQuery = ''
@@ -113,17 +114,26 @@ def main(request):
 
         context = {
             'userQuery': userQuery,
-              'result': result, 
-              'dataframe': df, 
-              'databaseNames': databaseNames, 
-              'collectionNames': collectionNames,
-              'selectedDB': db,
-              'selectedCollection': collection
-            }
+            'result': result, 
+            'dataframe': df, 
+            'databaseNames': databaseNames, 
+            'collectionNames': collectionNames,
+            'selectedDB': db,
+            'selectedCollection': collection
+        }
     else:
         userQuery = ''  # Set the initial value of userQuery when the page is first loaded
         result = '' 
         context = {'databaseNames': databaseNames, 'userQuery': userQuery, 'result': result}
-    
+
     return render(request, 'master.html', context)
 
+@csrf_exempt
+def update_collections(request):
+    db = request.POST.get('database')
+    collectionNames = []
+    if db:
+        # Get the list of collections for the selected database
+        collectionNames = client[db].list_collection_names()
+
+    return JsonResponse({'collections': collectionNames})

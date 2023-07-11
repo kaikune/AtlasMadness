@@ -71,8 +71,8 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title">Enter your query</h5>
-            <form method="post" action="{% url 'main' %}">
-              {% csrf_token %}
+            <!--DB Picker-->
+            <form method="post" action="{% url 'update_collections' %}">
               <div class="form-group">
                 <label for="database">Select Database:</label>
                 <select class="form-control" id="database" name="database" onchange="this.form.submit()">
@@ -89,6 +89,10 @@
                   {% endfor %}
                 </select>
               </div>
+            <!--User input query-->
+            </form>
+            <form method="post" action="{% url 'main' %}">
+              {% csrf_token %}
               <div class="mb-3">
                 <input id="userQuery" name="userQuery" class="form-control" type="text" placeholder="E.g., find all documents with 'foo' field">
               </div>
