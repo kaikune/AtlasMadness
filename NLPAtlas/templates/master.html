@@ -62,6 +62,15 @@
     ::-webkit-scrollbar-thumb:hover {
       background-color: #a0a0a0;
     }
+
+    .picker-container {
+      display: flex;
+    }
+    
+    .picker-container .form-group {
+      flex: 1;
+      margin-right: 10px;
+    }
   </style>
 </head>
 <body>
@@ -74,7 +83,8 @@
             <!-- DB Picker -->
             <form id="dbForm" method="post" action="{% url 'main' %}">
               {% csrf_token %}
-              <div class="form-group">
+              <div class="picker-container">
+                <div class="form-group">
                 <label for="database">Select Database:</label>
                 <select class="form-control" id="database" name="database">
                   {% for database in databaseNames %}
@@ -89,6 +99,7 @@
                     <option value="{{ collection }}">{{ collection }}</option>
                   {% endfor %}
                 </select>
+              </div>
               </div>
               <!-- User input query -->
               <div class="mb-3">
@@ -118,22 +129,7 @@
   <script>
     // Update collection options when the database selection changes
     document.getElementById('database').addEventListener('change', function() {
-      var database = this.value;
-      fetch('/update_collections?database=' + database)
-        .then(response => response.json())
-        .then(data => {
-          var collectionSelect = document.getElementById('collection');
-          collectionSelect.innerHTML = ''; // Clear existing options
-          data.forEach(collection => {
-            var option = document.createElement('option');
-            option.value = collection;
-            option.text = collection;
-            collectionSelect.appendChild(option);
-          });
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
+      document.getElementById('dbForm').submit();
     });
   </script>
 </body>

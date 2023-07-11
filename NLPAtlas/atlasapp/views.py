@@ -16,8 +16,8 @@ uri = 'mongodb+srv://alexkai03:fDiGRgzlwU0MFS0V@cluster0.bdepqww.mongodb.net/?re
 prompt = 'You are a natural language to MongoDB query generator that only outputs code if 100percent certain of correctness.\
       Assume prerequisite code is supplied. All queries will be executed in python so it must follow python syntax. \
       In the format: \
-    db=client["selected_db"] \
-    collection = db.selected_collection \
+    db=client["database_name"] \
+    collection = db.collection_name \
     #Do the mongoDB query here \
     cursor = #query result \
     The constraints are: \
@@ -29,6 +29,9 @@ prompt = 'You are a natural language to MongoDB query generator that only output
 
 # Create a new client and connect to the server
 client = MongoClient(uri, server_api=ServerApi('1'))
+# db = client['sample_supplies']
+# collection = db.sales
+
 
 # Send a ping to confirm a successful connection
 try:
@@ -73,13 +76,12 @@ def runQuery(query, db, collection):
         print('Running query...')
         try:
             exec(query, globals())
-            print('Query executed!')
+            print('Query execute')
             return cursor
         except Exception as e:
             print(f'Invalid query: {e}')
             return 'Bad query'
     return runQueryHelper()
-
 
 @csrf_exempt
 def main(request):
@@ -95,23 +97,21 @@ def main(request):
         collection = request.POST.get('collection')
 
         collectionNames = []
-        result = ''
         if db:
             # Get the list of collections for the selected database
             collectionNames = client[db].list_collection_names()
 
-        if collection:
-            userQuery = prompt.format(db, collection, userQuery)
-            print('User Query:', userQuery)
-            result = generateQuery(userQuery)
+        userQuery = prompt.format(db, collection, userQuery)
+        print('User Query:', userQuery)
+        result = generateQuery(userQuery)
 
-            if isValidPython(result):
-                data = runQuery(result, db, collection)
-                df = pd.DataFrame(data)
-                print(df)
-                df = df.to_html(classes='table table-dark table-hover')
-            else:
-                print('Bad python generated')
+        if isValidPython(result):
+            data = runQuery(result, db, collection)
+            df = pd.DataFrame(data)
+            print(df)
+            df = df.to_html(classes='table table-dark table-hover')
+        else:
+            print('Bad python generated')
 
         context = {
             'userQuery': userQuery,
@@ -129,8 +129,12 @@ def main(request):
 
     return render(request, 'master.html', context)
 
+@csrf_exempt
 def update_collections(request):
-    database = request.GET.get('database')
-    # Get the list of collections for the selected database
-    collectionNames = client[database].list_collection_names()
-    return JsonResponse(list(collectionNames), safe=False)
+    db = request.POST.get('database')
+    collectionNames = []
+    if db:
+        # Get the list of collections for the selected database
+        collectionNames = client[db].list_collection_names()
+
+    return JsonResponse({'collections': collectionNames})
