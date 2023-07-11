@@ -127,13 +127,3 @@ def main(request):
         context = {'databaseNames': databaseNames, 'userQuery': userQuery, 'result': result}
 
     return render(request, 'master.html', context)
-
-@csrf_exempt
-def update_collections(request):
-    db = request.POST.get('database')
-    collectionNames = []
-    if db:
-        # Get the list of collections for the selected database
-        collectionNames = client[db].list_collection_names()
-
-    return JsonResponse({'collections': collectionNames})
